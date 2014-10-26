@@ -1,7 +1,6 @@
-# generator-ms-npm [![Build Status](https://secure.travis-ci.org/digitalsadhu/generator-ms-npm.png?branch=master)](https://travis-ci.org/digitalsadhu/generator-ms-npm)
+# generator-ms-npm
 
 > [Yeoman](http://yeoman.io) generator
-
 
 ## Getting Started
 
