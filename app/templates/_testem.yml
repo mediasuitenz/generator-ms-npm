@@ -1,11 +1,13 @@
 launchers:
-  Node:
-    command: node_modules/.bin/mocha --ui mocha-given --require coffee-script -R tap --compilers coffee:coffee-script/register
+  Mocha:
+    command: node_modules/.bin/mocha --ui mocha-given -R tap
     protocol: tap
+  Mocha CI:
+    command: node_modules/.bin/mocha --ui mocha-given -R spec
 launch_in_dev:
 - Node
 launch_in_ci:
-- Node
+- Mocha CI
 src_files:
-  - "test/**/*.spec.coffee"
+  - "test/**/*.spec.js"
   - "index.js"
