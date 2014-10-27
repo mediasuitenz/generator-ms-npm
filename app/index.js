@@ -103,7 +103,7 @@ var MsNpmGenerator = yeoman.generators.Base.extend({
     },
     mocha: function() {
       var done = this.async();
-      this.npmInstall(['mocha'], { 'saveDev': true }, done)
+      this.npmInstall(['mocha@~1.20.1'], { 'saveDev': true }, done)
     },
     expect: function() {
       var done = this.async();
