@@ -84,6 +84,7 @@ var MsNpmGenerator = yeoman.generators.Base.extend({
   configuring: {
     metafiles: function () {
       this.template('_package.json', 'package.json', this.userValues);
+      this.template('_README.md', 'README.md', this.userValues);
 
       this.src.copy('editorconfig', '.editorconfig');
       this.src.copy('gitignore', '.gitignore');
@@ -94,7 +95,6 @@ var MsNpmGenerator = yeoman.generators.Base.extend({
       this.src.copy('_circle.yml', 'circle.yml');
       this.src.copy('_testem.yml', 'testem.yml');
       this.src.copy('_LICENSE', 'LICENSE');
-      this.src.copy('_README.md', 'README.md');
     }
   },
   writing: {
