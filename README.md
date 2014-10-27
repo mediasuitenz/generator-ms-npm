@@ -33,35 +33,35 @@ yo ms-npm <appname>
 
 Assuming we wish to create a module called my-module
 
-1. Create a github repo called my-module under the mediasuitenz organisation, on the travis ci site, add the repo
-2. Run the following:
+- Create a github repo called my-module under the mediasuitenz organisation, on the travis ci site, add the repo
+- Run the following:
 ```bash
 yo ms-npm my-module
 ```
-3. Answer the questions (mostly accept the defaults where applicable)
-4. Run the following:
+- Answer the questions (mostly accept the defaults where applicable)
+- Run the following:
 ```bash
 cd my-module
 git add .
 git commit -m "Initial commit"
 git push origin master #the git remote has already been added by yeoman
 ```
-5. fire up testem 
+- fire up testem 
 ```bash
 npm run test:dev 
 ```
-6. Add your module code to index.js and your tests to the /test folder (as .spec.js files)
-7. Commit your changes
-8. Version your code (starts at 0.0.0)
+- Add your module code to index.js and your tests to the /test folder (as .spec.js files)
+- Commit your changes
+- Version your code (starts at 0.0.0)
 ```bash
 npm version patch -m "added some code"
 ```
-9. push your code
+- push your code
 ```bash
 git push origin master
 git push origin --tags
 ```
-10. Publish your module
+- Publish your module
 ```bash
 npm publish
 ```
