@@ -5,10 +5,20 @@ var yeoman = require('yeoman-generator');
 var yosay = require('yosay');
 
 var MsNpmGenerator = yeoman.generators.Base.extend({
+  constructor: function () {
+    yeoman.generators.Base.apply(this, arguments);
+
+    this.argument('name', {
+      desc: 'The name of the npm module, this will be used for publishing to npm',
+      required: true
+    })
+
+    this.mkdir(this.name)
+    this.destinationRoot(this.name)
+  },
   initializing: function () {
     this.pkg = require('../package.json');
   },
-
   prompting: function () {
     var done = this.async();
 
@@ -17,13 +27,6 @@ var MsNpmGenerator = yeoman.generators.Base.extend({
     ));
 
     var prompts = []
-
-    prompts.push({
-      type: 'input',
-      name: 'moduleName',
-      message: 'Module name:',
-      default: ''
-    });
 
     prompts.push({
       type: 'input',
@@ -61,7 +64,8 @@ var MsNpmGenerator = yeoman.generators.Base.extend({
     });
 
     this.prompt(prompts, function (props) {
-      this.userValues = props
+      this.userValues = props;
+      this.userValues.moduleName = this.name;
 
       var keywords = '["';
       keywords += props.moduleKeywords.split(',').join('","')
