@@ -2,12 +2,8 @@ launchers:
   Mocha:
     command: node_modules/.bin/mocha --ui mocha-given -R tap
     protocol: tap
-  Mocha CI:
-    command: node_modules/.bin/mocha --ui mocha-given -R spec
 launch_in_dev:
 - Node
-launch_in_ci:
-- Mocha CI
 src_files:
   - "test/**/*.spec.js"
   - "index.js"

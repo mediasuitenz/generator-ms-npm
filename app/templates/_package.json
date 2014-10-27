@@ -23,8 +23,8 @@
   "scripts": {
     "lint": "jshint .",
     "pretest": "npm run lint",
-    "test:ci": "testem ci",
-    "test:dev": "testem",
+    "test:ci": "mocha --ui mocha-given -R spec test",
+    "test:dev": "testem .",
     "test": "npm run test:ci",
     "prepublish": "npm test && npm prune"
   },
