@@ -68,7 +68,9 @@ var MsNpmGenerator = yeoman.generators.Base.extend({
       this.userValues.moduleName = this.name;
 
       var keywords = '["';
-      keywords += props.moduleKeywords.split(',').join('","')
+      keywords += props.moduleKeywords.split(',').map(function(keyword) {
+        return keyword.trim()
+      }).join('","')
       keywords += '"]';
 
       this.userValues.moduleKeywords = keywords;
