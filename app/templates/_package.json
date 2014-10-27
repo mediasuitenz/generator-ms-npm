@@ -1,5 +1,38 @@
 {
-  "name": "package",
+  "name": "<%= _.slugify(moduleName) %>",
+  "description": "<%= moduleDescription %>",
   "version": "0.0.0",
-  "dependencies": {}
+  "license": "MIT",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/<%= githubOrganizationOrUsername %>/<%= _.slugify(moduleName) %>.git"
+  },
+  "bugs": {
+    "url": "https://github.com/<%= githubOrganizationOrUsername %>/<%= _.slugify(moduleName) %>/issues"
+  },
+  "homepage": "https://github.com/<%= githubOrganizationOrUsername %>/<%= _.slugify(moduleName) %>",
+  "author": {
+    "name": "<%= authorName %>",
+    "email": "<%= authorEmail %>",
+    "url": "<%= moduleWebsite %>"
+  },
+  "engines": {
+    "node": "<%= nodeVersion %>"
+  },
+  "scripts": {
+    "lint": "jshint .",
+    "pretest": "npm run lint",
+    "test:ci": "testem ci",
+    "test:dev": "testem",
+    "test": "npm run test:ci",
+    "prepublish": "npm test && npm prune"
+  },
+  "publishConfig": {
+    "registry": "http://registry.npmjs.org"
+  },
+  "keywords": "<%= moduleKeywords %>",
+  "dependencies": {},
+  "devDependencies": {},
+  "peerDependencies": {}
 }
