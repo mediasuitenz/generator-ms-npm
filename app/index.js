@@ -129,6 +129,17 @@ var MsNpmGenerator = yeoman.generators.Base.extend({
   },
   end: function () {
     this.installDependencies();
+
+    //setup git and git remote
+    var remote = util.format(
+      'git@github.com:%s/%s.git',
+      this.userValues.githubOrganizationOrUsername,
+      this.name
+    );
+    this.spawnCommand('git', ['init'])
+      .on('close', function () {
+        this.spawnCommand('git', ['remote', 'add', 'origin', remote]);
+      }.bind(this));
   }
 });
 
