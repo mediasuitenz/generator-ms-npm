@@ -62,6 +62,13 @@ var MsNpmGenerator = yeoman.generators.Base.extend({
 
     this.prompt(prompts, function (props) {
       this.userValues = props
+
+      var keywords = '["';
+      keywords += props.moduleKeywords.split(',').join('","')
+      keywords += '"]';
+
+      this.userValues.moduleKeywords = keywords;
+
       this.userValues.authorName = this.user.git.name();
       this.userValues.authorEmail = this.user.git.email();
 
