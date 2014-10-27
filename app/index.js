@@ -12,29 +12,66 @@ var MsNpmGenerator = yeoman.generators.Base.extend({
   prompting: function () {
     var done = this.async();
 
-    // Have Yeoman greet the user.
     this.log(yosay(
       'Welcome to the Media Suite npm module generator!'
     ));
 
-    // var prompts = [{
-    //   type: 'confirm',
-    //   name: 'someOption',
-    //   message: 'Would you like to enable this option?',
-    //   default: true
-    // }];
+    var prompts = []
 
-    // this.prompt(prompts, function (props) {
-    //   this.someOption = props.someOption;
+    prompts.push({
+      type: 'input',
+      name: 'moduleName',
+      message: 'Module name:',
+      default: ''
+    });
 
-    //   done();
-    // }.bind(this));
+    prompts.push({
+      type: 'input',
+      name: 'moduleDescription',
+      message: 'Module description:',
+      default: ''
+    });
 
-    done();
+    prompts.push({
+      type: 'input',
+      name: 'githubOrganizationOrUsername',
+      message: 'Github organization or username for repo:',
+      default: 'mediasuitenz'
+    });
+
+    prompts.push({
+      type: 'input',
+      name: 'moduleWebsite',
+      message: 'Module website:',
+      default: 'https://mediasuite.co.nz'
+    });
+
+    prompts.push({
+      type: 'input',
+      name: 'nodeVersion',
+      message: 'Node version:',
+      default: '>=0.10.0'
+    });
+
+    prompts.push({
+      type: 'input',
+      name: 'moduleKeywords',
+      message: 'Keywords (comma separated):',
+      default: ''
+    });
+
+    this.prompt(prompts, function (props) {
+      this.userValues = props
+      this.userValues.authorName = this.user.git.name();
+      this.userValues.authorEmail = this.user.git.email();
+
+      done();
+    }.bind(this));
   },
   configuring: {
     metafiles: function () {
-      this.src.copy('_package.json', 'package.json');
+      this.template('_package.json', 'package.json', this.userValues);
+
       this.src.copy('editorconfig', '.editorconfig');
       this.src.copy('gitignore', '.gitignore');
       this.src.copy('jshintrc', '.jshintrc');
