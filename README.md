@@ -6,21 +6,16 @@
 
 ### What is Yeoman?
 
-Trick question. It's not a thing. It's this guy:
+Basically, he lives in your computer, and waits for you to tell him what kind of application you wish to create.
 
-![](http://i.imgur.com/JHaAlBJ.png)
-
-Basically, he wears a top hat, lives in your computer, and waits for you to tell him what kind of application you wish to create.
-
-Not every new computer comes with a Yeoman pre-installed. He lives in the [npm](https://npmjs.org) package repository. You only have to ask for him once, then he packs up and moves into your hard drive. *Make sure you clean up, he likes new and shiny things.*
-
+Install yeoman:
 ```bash
 npm install -g yo
 ```
 
 ### Yeoman Generators
 
-Yeoman travels light. He didn't pack any generators when he moved in. You can think of a generator like a plug-in. You get to choose what type of application you wish to create, such as a Backbone application or even a Chrome extension.
+Yeoman travels light. He didn't doesn't come with any generators. A generator is like a plug-in. You get to choose what type of application you wish to create, such as a Backbone application or even a Chrome extension.
 
 To install generator-ms-npm from npm, run:
 
@@ -31,15 +26,45 @@ npm install -g generator-ms-npm
 Finally, initiate the generator:
 
 ```bash
-yo ms-npm
+yo ms-npm <appname>
 ```
 
-### Getting To Know Yeoman
+## Full NPM workflow
 
-Yeoman has a heart of gold. He's a person with feelings and opinions, but he's very easy to work with. If you think he's too opinionated, he can be easily convinced.
+Assuming we wish to create a module called my-module
 
-If you'd like to get to know Yeoman better and meet some of his friends, [Grunt](http://gruntjs.com) and [Bower](http://bower.io), check out the complete [Getting Started Guide](https://github.com/yeoman/yeoman/wiki/Getting-Started).
-
+1. Create a github repo called my-module under the mediasuitenz organisation, on the travis ci site, add the repo
+2. Run the following:
+```bash
+yo ms-npm my-module
+```
+3. Answer the questions (mostly accept the defaults where applicable)
+4. Run the following:
+```bash
+cd my-module
+git add .
+git commit -m "Initial commit"
+git push origin master #the git remote has already been added by yeoman
+```
+5. fire up testem 
+```bash
+npm run test:dev 
+```
+6. Add your module code to index.js and your tests to the /test folder (as .spec.js files)
+7. Commit your changes
+8. Version your code (starts at 0.0.0)
+```bash
+npm version patch -m "added some code"
+```
+9. push your code
+```bash
+git push origin master
+git push origin --tags
+```
+10. Publish your module
+```bash
+npm publish
+```
 
 ## License
 
