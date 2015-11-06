@@ -52,7 +52,7 @@ var MsNpmGenerator = yeoman.generators.Base.extend({
       type: 'input',
       name: 'nodeVersion',
       message: 'Node version:',
-      default: '>=0.10.0'
+      default: '>=4.2.0'
     })
 
     prompts.push({
