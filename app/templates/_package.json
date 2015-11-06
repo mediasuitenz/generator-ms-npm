@@ -21,7 +21,7 @@
     "node": "<%= nodeVersion %>"
   },
   "scripts": {
-    "lint": "jshint .",
+    "lint": "standard --verbose | snazzy",
     "pretest": "npm run lint",
     "test:ci": "mocha --ui mocha-given -R spec test",
     "test:dev": "testem .",

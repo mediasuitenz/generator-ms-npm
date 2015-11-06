@@ -100,9 +100,13 @@ var MsNpmGenerator = yeoman.generators.Base.extend({
     }
   },
   install: {
-    jshint: function () {
+    standard: function () {
       var done = this.async()
-      this.npmInstall(['jshint'], { 'saveDev': true }, done)
+      this.npmInstall(['standard'], { 'saveDev': true }, done)
+    },
+    snazzy: function () {
+      var done = this.async()
+      this.npmInstall(['snazzy'], { 'saveDev': true }, done)
     },
     testdir: function () {
       this.dest.mkdir('test')
