@@ -87,8 +87,6 @@ var MsNpmGenerator = yeoman.generators.Base.extend({
 
       this.src.copy('editorconfig', '.editorconfig')
       this.src.copy('gitignore', '.gitignore')
-      this.src.copy('jshintrc', '.jshintrc')
-      this.src.copy('jshintignore', '.jshintignore')
       this.src.copy('npmignore', '.npmignore')
       this.src.copy('travis.yml', '.travis.yml')
       this.src.copy('_circle.yml', 'circle.yml')
