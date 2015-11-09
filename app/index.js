@@ -62,6 +62,14 @@ var MsNpmGenerator = yeoman.generators.Base.extend({
       default: ''
     })
 
+    prompts.push({
+      type: 'list',
+      name: 'ci',
+      message: 'Add CI?:',
+      default: 'None',
+      choices: ['None', 'Circle-CI', 'Travis', 'Both']
+    })
+
     this.prompt(prompts, function (props) {
       this.userValues = props
       this.userValues.moduleName = this.name
@@ -88,8 +96,17 @@ var MsNpmGenerator = yeoman.generators.Base.extend({
       this.src.copy('editorconfig', '.editorconfig')
       this.src.copy('gitignore', '.gitignore')
       this.src.copy('npmignore', '.npmignore')
-      this.src.copy('travis.yml', '.travis.yml')
-      this.src.copy('_circle.yml', 'circle.yml')
+
+      var ci = this.userValues.ci
+      if (ci === 'Both') {
+        this.src.copy('travis.yml', '.travis.yml')
+        this.src.copy('_circle.yml', 'circle.yml')
+      } else if (ci === 'Circle-CI') {
+        this.src.copy('_circle.yml', 'circle.yml')
+      } else if (ci === 'Travis') {
+        this.src.copy('travis.yml', '.travis.yml')
+      }
+
       this.src.copy('_testem.yml', 'testem.yml')
       this.src.copy('_LICENSE', 'LICENSE')
     }
