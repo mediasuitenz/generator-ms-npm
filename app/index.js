@@ -121,29 +121,16 @@ var MsNpmGenerator = yeoman.generators.Base.extend({
     }
   },
   install: {
-    standard: function () {
+    npmDependencies: function () {
       var done = this.async()
-      this.npmInstall(['standard'], { 'saveDev': true }, done)
-    },
-    snazzy: function () {
-      var done = this.async()
-      this.npmInstall(['snazzy'], { 'saveDev': true }, done)
-    },
-    testem: function () {
-      var done = this.async()
-      this.npmInstall(['testem'], { 'saveDev': true }, done)
-    },
-    mocha: function () {
-      var done = this.async()
-      this.npmInstall(['mocha@~1.20.1'], { 'saveDev': true }, done)
-    },
-    chai: function () {
-      var done = this.async()
-      this.npmInstall(['chai'], { 'saveDev': true }, done)
-    },
-    mochagiven: function () {
-      var done = this.async()
-      this.npmInstall(['mocha-given'], { 'saveDev': true }, done)
+      this.npmInstall([
+        'standard',
+        'snazzy',
+        'testem',
+        'mocha',
+        'chai',
+        'mocha-given'
+      ], { 'saveDev': true }, done)
     }
   },
   end: function () {
