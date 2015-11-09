@@ -2,6 +2,7 @@
 var util = require('util')
 var yeoman = require('yeoman-generator')
 var yosay = require('yosay')
+var async = require('async')
 
 var MsNpmGenerator = yeoman.generators.Base.extend({
   constructor: function () {
@@ -142,10 +143,22 @@ var MsNpmGenerator = yeoman.generators.Base.extend({
       this.userValues.githubOrganizationOrUsername,
       this.name
     )
-    this.spawnCommand('git', ['init'])
-      .on('close', function () {
-        this.spawnCommand('git', ['remote', 'add', 'origin', remote])
-      }.bind(this))
+
+    var gitArgs = [
+      ['init'],
+      ['remote', 'add', 'origin', remote],
+      ['add', '.'],
+      ['commit', '-m', '"initial commit"']
+    ]
+
+    var spawn = (args, cb) => {
+      this.spawnCommand('git', args).on('close', () => {
+        cb()
+      })
+    }
+
+    var done = this.async()
+    async.eachSeries(gitArgs, spawn, done)
   }
 })
 
