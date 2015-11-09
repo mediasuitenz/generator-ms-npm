@@ -7,14 +7,6 @@ var async = require('async')
 var MsNpmGenerator = yeoman.generators.Base.extend({
   constructor: function () {
     yeoman.generators.Base.apply(this, arguments)
-
-    this.argument('name', {
-      desc: 'The name of the npm module, this will be used for publishing to npm',
-      required: true
-    })
-
-    this.mkdir(this.name)
-    this.destinationRoot(this.name)
   },
   initializing: function () {
     this.pkg = require('../package.json')
@@ -27,6 +19,13 @@ var MsNpmGenerator = yeoman.generators.Base.extend({
     ))
 
     var prompts = []
+
+    prompts.push({
+      type: 'input',
+      name: 'moduleName',
+      message: 'Module Name(will be used for publishing to NPM):',
+      default: this.appname
+    })
 
     prompts.push({
       type: 'input',
@@ -73,7 +72,7 @@ var MsNpmGenerator = yeoman.generators.Base.extend({
 
     this.prompt(prompts, function (props) {
       this.userValues = props
-      this.userValues.moduleName = this.name
+      this.moduleName = props.moduleName
 
       var keywords = '["'
       keywords += props.moduleKeywords.split(',').map(function (keyword) {
@@ -90,6 +89,12 @@ var MsNpmGenerator = yeoman.generators.Base.extend({
     }.bind(this))
   },
   configuring: {
+    projectRoot: function () {
+      if (this.appname !== this.moduleName) {
+        this.mkdir(this.moduleName)
+        this.destinationRoot(this.moduleName)
+      }
+    },
     metafiles: function () {
       this.template('_package.json', 'package.json', this.userValues)
       this.template('_README.md', 'README.md', this.userValues)
