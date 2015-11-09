@@ -21,12 +21,18 @@
     "node": "<%= nodeVersion %>"
   },
   "scripts": {
-    "lint": "jshint .",
+    "lint": "standard --verbose | snazzy",
     "pretest": "npm run lint",
     "test:ci": "mocha --ui mocha-given -R spec test",
     "test:dev": "testem .",
     "test": "npm run test:ci",
-    "prepublish": "npm test && npm prune"
+    "prepublish": "npm test && npm prune",
+    "preversion:patch": "npm run test",
+    "version:patch": "xyz -i patch",
+    "preversion:minor": "npm run test",
+    "version:minor": "xyz -i minor",
+    "preversion:major": "npm run test",
+    "version:major": "xyz -i major"
   },
   "publishConfig": {
     "registry": "http://registry.npmjs.org"

@@ -1,10 +1,10 @@
-/*global describe, beforeEach, it*/
-'use strict';
+/*global describe, before, it*/
+'use strict'
 
-var path = require('path');
-var assert = require('yeoman-generator').assert;
-var helpers = require('yeoman-generator').test;
-var os = require('os');
+var path = require('path')
+var assert = require('yeoman-generator').assert
+var helpers = require('yeoman-generator').test
+var os = require('os')
 
 describe('ms-npm:app', function () {
   before(function (done) {
@@ -14,8 +14,8 @@ describe('ms-npm:app', function () {
       .withPrompt({
         someOption: true
       })
-      .on('end', done);
-  });
+      .on('end', done)
+  })
 
   it('creates files', function () {
     assert.file([
@@ -23,6 +23,6 @@ describe('ms-npm:app', function () {
       'package.json',
       '.editorconfig',
       '.jshintrc'
-    ]);
-  });
-});
+    ])
+  })
+})
