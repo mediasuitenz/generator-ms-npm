@@ -141,7 +141,7 @@ var MsNpmGenerator = yeoman.generators.Base.extend({
     }
   },
   end: function () {
-    this.installDependencies()
+    this.installDependencies({bower: false})
 
     // setup git and git remote
     var remote = util.format(
