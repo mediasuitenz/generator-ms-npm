@@ -11,7 +11,7 @@
     "url": "https://github.com/digitalsadhu"
   },
   "engines": {
-    "node": ">=0.10.0"
+    "node": ">=4.2.0"
   },
   "scripts": {
     "lint": "standard --verbose | snazzy",
