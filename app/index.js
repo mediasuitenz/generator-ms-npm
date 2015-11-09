@@ -114,6 +114,10 @@ var MsNpmGenerator = yeoman.generators.Base.extend({
   writing: {
     projectfiles: function () {
       this.src.copy('_index.js', 'index.js')
+    },
+    testSpec: function () {
+      this.dest.mkdir('test')
+      this.src.copy('test.spec', 'test/default.spec.js')
     }
   },
   install: {
@@ -125,9 +129,6 @@ var MsNpmGenerator = yeoman.generators.Base.extend({
       var done = this.async()
       this.npmInstall(['snazzy'], { 'saveDev': true }, done)
     },
-    testdir: function () {
-      this.dest.mkdir('test')
-    },
     testem: function () {
       var done = this.async()
       this.npmInstall(['testem'], { 'saveDev': true }, done)
@@ -136,9 +137,9 @@ var MsNpmGenerator = yeoman.generators.Base.extend({
       var done = this.async()
       this.npmInstall(['mocha@~1.20.1'], { 'saveDev': true }, done)
     },
-    expect: function () {
+    chai: function () {
       var done = this.async()
-      this.npmInstall(['expect'], { 'saveDev': true }, done)
+      this.npmInstall(['chai'], { 'saveDev': true }, done)
     },
     mochagiven: function () {
       var done = this.async()
