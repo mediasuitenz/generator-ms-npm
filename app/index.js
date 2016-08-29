@@ -3,6 +3,7 @@ var util = require('util')
 var yeoman = require('yeoman-generator')
 var yosay = require('yosay')
 var async = require('async')
+var inflection = require('inflection')
 
 var MsNpmGenerator = yeoman.generators.Base.extend({
   constructor: function () {
@@ -24,7 +25,7 @@ var MsNpmGenerator = yeoman.generators.Base.extend({
       type: 'input',
       name: 'moduleName',
       message: 'Module Name(will be used for publishing to NPM):',
-      default: this.appname
+      default: inflection.dasherize(this.appname)
     })
 
     prompts.push({
@@ -90,7 +91,7 @@ var MsNpmGenerator = yeoman.generators.Base.extend({
   },
   configuring: {
     projectRoot: function () {
-      if (this.appname !== this.moduleName) {
+      if (inflection.dasherize(this.appname) !== this.moduleName) {
         this.mkdir(this.moduleName)
         this.destinationRoot(this.moduleName)
       }
@@ -135,7 +136,6 @@ var MsNpmGenerator = yeoman.generators.Base.extend({
         'testem',
         'mocha',
         'chai',
-        'mocha-given',
         'xyz'
       ], { 'saveDev': true }, done)
     }
@@ -147,7 +147,7 @@ var MsNpmGenerator = yeoman.generators.Base.extend({
     var remote = util.format(
       'git@github.com:%s/%s.git',
       this.userValues.githubOrganizationOrUsername,
-      this.name
+      this.moduleName
     )
 
     var gitArgs = [

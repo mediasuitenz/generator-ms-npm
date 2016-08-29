@@ -23,7 +23,7 @@
   "scripts": {
     "lint": "standard --verbose | snazzy",
     "pretest": "npm run lint",
-    "test:ci": "mocha --ui mocha-given -R spec test",
+    "test:ci": "mocha -R spec test",
     "test:dev": "testem .",
     "test": "npm run test:ci",
     "prepublish": "npm test && npm prune",
