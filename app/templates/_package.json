@@ -42,8 +42,29 @@
   "dependencies": {},
   "devDependencies": {},
   "peerDependencies": {},
+  "maintainers": [
+    "<%= authorName %> <%= authorEmail %>"
+  ],
+  "contributors": [],
   "badges": {
     "list": [
+      [
+        "badge",
+        {
+          "image": "https://mediasuite.co.nz/ms-badge.png",
+          "url": "https://mediasuite.co.nz",
+          "title": "The Media Suite",
+          "alt": "The Media Suite"
+        }
+      ],
+      "---",
+      [
+        "badge",
+        {
+          "image": "https://nodei.co/npm/<%= _.slugify(moduleName) %>.png?downloads=true&stars=true",
+          "url": "https://nodei.co/npm/<%= _.slugify(moduleName) %>"
+        }
+      ],
       "---",
       "travisci",
       "npmversion",
@@ -51,5 +72,8 @@
       "daviddm",
       "daviddmdev"
     ]
-  }
+  },
+  "sponsors": [
+    "The Media Suite (http://mediasuite.co.nz)"
+  ]
 }

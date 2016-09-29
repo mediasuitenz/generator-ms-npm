@@ -165,7 +165,9 @@ var MsNpmGenerator = yeoman.generators.Base.extend({
     }
 
     var done = this.async()
-    async.eachSeries(gitArgs, spawn, done)
+    this.spawnCommand('npm', ['run', 'readme']).on('close', () => {
+      async.eachSeries(gitArgs, spawn, done)
+    })
   }
 })
 

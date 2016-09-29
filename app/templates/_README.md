@@ -7,6 +7,5 @@
 Usage instructions go here
 
 <!-- HISTORY -->
-<!-- CONTRIBUTE -->
 <!-- BACKERS -->
 <!-- LICENSE -->
