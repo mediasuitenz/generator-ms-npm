@@ -95,6 +95,8 @@ var MsNpmGenerator = yeoman.generators.Base.extend({
         this.mkdir(this.moduleName)
         this.destinationRoot(this.moduleName)
       }
+      this.dest.mkdir('src')
+      this.dest.mkdir('dist')
     },
     metafiles: function () {
       this.template('_package.json', 'package.json', this.userValues)
@@ -120,7 +122,7 @@ var MsNpmGenerator = yeoman.generators.Base.extend({
   },
   writing: {
     projectfiles: function () {
-      this.src.copy('_index.js', 'index.js')
+      this.src.copy('_index.js', 'src/index.js')
     },
     testSpec: function () {
       this.dest.mkdir('test')
@@ -136,7 +138,11 @@ var MsNpmGenerator = yeoman.generators.Base.extend({
         'testem',
         'mocha',
         'chai',
-        'xyz'
+        'xyz',
+        'projectz',
+        'babel-cli',
+        'babel-eslint',
+        'babel-preset-es2015'
       ], { 'saveDev': true }, done)
     }
   },
@@ -164,7 +170,9 @@ var MsNpmGenerator = yeoman.generators.Base.extend({
     }
 
     var done = this.async()
-    async.eachSeries(gitArgs, spawn, done)
+    this.spawnCommand('npm', ['run', 'readme']).on('close', () => {
+      async.eachSeries(gitArgs, spawn, done)
+    })
   }
 })
 
