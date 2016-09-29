@@ -32,7 +32,8 @@
     "preversion:minor": "npm run test",
     "version:minor": "xyz -i minor",
     "preversion:major": "npm run test",
-    "version:major": "xyz -i major"
+    "version:major": "xyz -i major",
+    "readme": "projectz compile"
   },
   "publishConfig": {
     "registry": "http://registry.npmjs.org"
@@ -40,5 +41,15 @@
   "keywords": <%= moduleKeywords %>,
   "dependencies": {},
   "devDependencies": {},
-  "peerDependencies": {}
+  "peerDependencies": {},
+  "badges": {
+    "list": [
+      "---",
+      "travisci",
+      "npmversion",
+      "npmdownloads",
+      "daviddm",
+      "daviddmdev"
+    ]
+  }
 }

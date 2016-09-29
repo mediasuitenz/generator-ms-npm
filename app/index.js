@@ -136,7 +136,8 @@ var MsNpmGenerator = yeoman.generators.Base.extend({
         'testem',
         'mocha',
         'chai',
-        'xyz'
+        'xyz',
+        'projectz'
       ], { 'saveDev': true }, done)
     }
   },
