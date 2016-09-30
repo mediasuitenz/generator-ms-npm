@@ -23,6 +23,14 @@ var MsNpmGenerator = yeoman.generators.Base.extend({
 
     var prompts = []
 
+    if (!this.config.get('GITHUB_TOKEN')) {
+      prompts.push({
+        type: 'input',
+        name: 'GITHUB_TOKEN',
+        message: 'Please enter your github oauth token (in order to be able to create github repositories):'
+      })
+    }
+
     prompts.push({
       type: 'input',
       name: 'moduleName',
@@ -95,6 +103,10 @@ var MsNpmGenerator = yeoman.generators.Base.extend({
 
       this.userValues.authorName = this.user.git.name()
       this.userValues.authorEmail = this.user.git.email()
+
+      if (props.GITHUB_TOKEN) {
+        this.config.set('GITHUB_TOKEN', props.GITHUB_TOKEN)
+      }
 
       done()
     }.bind(this))
@@ -183,12 +195,13 @@ var MsNpmGenerator = yeoman.generators.Base.extend({
     var respository = this.userValues.repository
     var name = this.moduleName
     var description = this.userValues.moduleDescription
+    var token = this.config.get('GITHUB_TOKEN')
 
     var done = this.async()
     this.spawnCommand('npm', ['run', 'readme']).on('close', () => {
       async.eachSeries(gitArgs, spawn, () => {
         if (respository !== 'Please create one for me') return done()
-        createRepository(name, description, done)
+        createRepository(token, name, description, done)
       })
     })
   }
