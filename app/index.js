@@ -1,9 +1,11 @@
 'use strict'
+
 var util = require('util')
 var yeoman = require('yeoman-generator')
 var yosay = require('yosay')
 var async = require('async')
 var inflection = require('inflection')
+var createRepository = require('./create-repository')
 
 var MsNpmGenerator = yeoman.generators.Base.extend({
   constructor: function () {
@@ -69,6 +71,14 @@ var MsNpmGenerator = yeoman.generators.Base.extend({
       message: 'Add CI?:',
       default: 'None',
       choices: ['None', 'Circle-CI', 'Travis', 'Both']
+    })
+
+    prompts.push({
+      type: 'list',
+      name: 'repository',
+      message: 'Github repository:',
+      default: 'I\'ll create one myself',
+      choices: ['I\'ll create one myself', 'Please create one for me']
     })
 
     this.prompt(prompts, function (props) {
@@ -142,7 +152,8 @@ var MsNpmGenerator = yeoman.generators.Base.extend({
         'projectz',
         'babel-cli',
         'babel-eslint',
-        'babel-preset-es2015'
+        'babel-preset-es2015',
+        'github'
       ], { 'saveDev': true }, done)
     }
   },
@@ -169,9 +180,16 @@ var MsNpmGenerator = yeoman.generators.Base.extend({
       })
     }
 
+    var respository = this.userValues.repository
+    var name = this.moduleName
+    var description = this.userValues.moduleDescription
+
     var done = this.async()
     this.spawnCommand('npm', ['run', 'readme']).on('close', () => {
-      async.eachSeries(gitArgs, spawn, done)
+      async.eachSeries(gitArgs, spawn, () => {
+        if (respository !== 'Please create one for me') return done()
+        createRepository(name, description, done)
+      })
     })
   }
 })
