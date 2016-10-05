@@ -1,17 +1,17 @@
 {
-  "name": "<%= _.slugify(moduleName) %>",
+  "name": "<%= moduleNameSlug %>",
   "description": "<%= moduleDescription %>",
   "version": "0.0.0",
   "license": "MIT",
   "main": "./dist/index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/<%= githubOrganizationOrUsername %>/<%= _.slugify(moduleName) %>.git"
+    "url": "https://github.com/<%= githubOrganizationOrUsername %>/<%= moduleNameSlug %>.git"
   },
   "bugs": {
-    "url": "https://github.com/<%= githubOrganizationOrUsername %>/<%= _.slugify(moduleName) %>/issues"
+    "url": "https://github.com/<%= githubOrganizationOrUsername %>/<%= moduleNameSlug %>/issues"
   },
-  "homepage": "https://github.com/<%= githubOrganizationOrUsername %>/<%= _.slugify(moduleName) %>",
+  "homepage": "https://github.com/<%= githubOrganizationOrUsername %>/<%= moduleNameSlug %>",
   "author": {
     "name": "<%= authorName %>",
     "email": "<%= authorEmail %>",
@@ -62,8 +62,8 @@
       [
         "badge",
         {
-          "image": "https://nodei.co/npm/<%= _.slugify(moduleName) %>.png?downloads=true&stars=true",
-          "url": "https://nodei.co/npm/<%= _.slugify(moduleName) %>"
+          "image": "https://nodei.co/npm/<%= moduleNameSlug %>.png?downloads=true&stars=true",
+          "url": "https://nodei.co/npm/<%= moduleNameSlug %>"
         }
       ],
       "---",
@@ -76,5 +76,10 @@
   },
   "sponsors": [
     "The Media Suite (http://mediasuite.co.nz)"
-  ]
+  ],
+  "standard": {
+    "ignore": [
+      "/dist/"
+    ]
+  }
 }

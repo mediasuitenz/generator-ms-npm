@@ -2,32 +2,39 @@
 
 var util = require('util')
 var yeoman = require('yeoman-generator')
-var yosay = require('yosay')
 var async = require('async')
 var inflection = require('inflection')
-var createRepository = require('./create-repository')
+var Github = require('github')
+var Storage = require('yeoman-generator/lib/util/storage')
+var path = require('path')
+var os = require('os')
+var mkdirp = require('mkdirp')
+var _ = require('lodash')
+var fs = require('fs')
+var chalk = require('chalk')
 
-var MsNpmGenerator = yeoman.generators.Base.extend({
+var MsNpmGenerator = yeoman.Base.extend({
   constructor: function () {
-    yeoman.generators.Base.apply(this, arguments)
+    yeoman.Base.apply(this, arguments)
+    this.option('--setup')
   },
   initializing: function () {
+    this.props = {}
     this.pkg = require('../package.json')
+    var storePath = path.join(os.homedir(), '.ms-npm.json')
+    this.globalConfig = new Storage('github', this.fs, storePath)
   },
   prompting: function () {
-    var done = this.async()
-
-    this.log(yosay(
-      'Welcome to the Media Suite npm module generator!'
-    ))
+    this.log(chalk.bgBlue('Welcome to the Media Suite npm module generator!'))
+    this.log('')
 
     var prompts = []
 
-    if (!this.config.get('GITHUB_TOKEN')) {
+    if (!this.globalConfig.get('token')) {
       prompts.push({
         type: 'input',
-        name: 'GITHUB_TOKEN',
-        message: 'Please enter your github oauth token (in order to be able to create github repositories):'
+        name: 'token',
+        message: 'Enter github oauth token to create repositories (optional):'
       })
     }
 
@@ -89,9 +96,14 @@ var MsNpmGenerator = yeoman.generators.Base.extend({
       choices: ['I\'ll create one myself', 'Please create one for me']
     })
 
-    this.prompt(prompts, function (props) {
+    return this.prompt(prompts).then(function (props) {
+      this.log('')
+      this.log(chalk.green('info'), 'scaffolding out project structure')
+      this.log('')
+
       this.userValues = props
       this.moduleName = props.moduleName
+      this.userValues.moduleNameSlug = inflection.dasherize(props.moduleName)
 
       var keywords = '["'
       keywords += props.moduleKeywords.split(',').map(function (keyword) {
@@ -104,56 +116,62 @@ var MsNpmGenerator = yeoman.generators.Base.extend({
       this.userValues.authorName = this.user.git.name()
       this.userValues.authorEmail = this.user.git.email()
 
-      if (props.GITHUB_TOKEN) {
-        this.config.set('GITHUB_TOKEN', props.GITHUB_TOKEN)
+      if (props.token) {
+        this.globalConfig.set('token', props.token)
       }
-
-      done()
     }.bind(this))
   },
   configuring: {
     projectRoot: function () {
       if (inflection.dasherize(this.appname) !== this.moduleName) {
-        this.mkdir(this.moduleName)
+        mkdirp(this.moduleName)
         this.destinationRoot(this.moduleName)
       }
-      this.dest.mkdir('src')
-      this.dest.mkdir('dist')
+      mkdirp(path.join(this.destinationPath(), 'src'))
+      mkdirp(path.join(this.destinationPath(), 'dist'))
     },
     metafiles: function () {
-      this.template('_package.json', 'package.json', this.userValues)
-      this.template('_README.md', 'README.md', this.userValues)
+      var packageTpl = _.template(fs.readFileSync(this.templatePath('_package.json')))
+      var readmeTpl = _.template(fs.readFileSync(this.templatePath('_README.md')))
 
-      this.src.copy('editorconfig', '.editorconfig')
-      this.src.copy('gitignore', '.gitignore')
-      this.src.copy('npmignore', '.npmignore')
+      var packageJson = packageTpl(this.userValues)
+      var readme = readmeTpl(this.userValues)
+
+      this.fs.write(path.join(this.destinationPath(), 'package.json'), packageJson)
+      this.fs.write(path.join(this.destinationPath(), 'README.md'), readme)
+
+      this.fs.copy(this.templatePath('editorconfig'), path.join(this.destinationPath(), '.editorconfig'))
+      this.fs.copy(this.templatePath('gitignore'), path.join(this.destinationPath(), '.gitignore'))
+      this.fs.copy(this.templatePath('npmignore'), path.join(this.destinationPath(), '.npmignore'))
 
       var ci = this.userValues.ci
       if (ci === 'Both') {
-        this.src.copy('travis.yml', '.travis.yml')
-        this.src.copy('_circle.yml', 'circle.yml')
+        this.fs.copy(this.templatePath('travis.yml'), path.join(this.destinationPath(), '.travis.yml'))
+        this.fs.copy(this.templatePath('_circle.yml'), path.join(this.destinationPath(), 'circle.yml'))
       } else if (ci === 'Circle-CI') {
-        this.src.copy('_circle.yml', 'circle.yml')
+        this.fs.copy(this.templatePath('_circle.yml'), path.join(this.destinationPath(), 'circle.yml'))
       } else if (ci === 'Travis') {
-        this.src.copy('travis.yml', '.travis.yml')
+        this.fs.copy(this.templatePath('travis.yml'), path.join(this.destinationPath(), '.travis.yml'))
       }
 
-      this.src.copy('_testem.yml', 'testem.yml')
-      this.src.copy('_LICENSE', 'LICENSE')
+      this.fs.copy(this.templatePath('_testem.yml'), path.join(this.destinationPath(), 'testem.yml'))
+      this.fs.copy(this.templatePath('_LICENSE'), path.join(this.destinationPath(), 'LICENSE'))
     }
   },
   writing: {
     projectfiles: function () {
-      this.src.copy('_index.js', 'src/index.js')
+      this.fs.copy(this.templatePath('_index.js'), path.join(this.destinationPath(), 'src/index.js'))
     },
     testSpec: function () {
-      this.dest.mkdir('test')
-      this.src.copy('test.spec', 'test/default.spec.js')
+      mkdirp(path.join(this.destinationPath(), 'test'))
+      this.fs.copy(this.templatePath('test.spec'), path.join(this.destinationPath(), 'test/default.spec.js'))
     }
   },
   install: {
     npmDependencies: function () {
-      var done = this.async()
+      this.log('')
+      this.log(chalk.green('info'), 'installing npm dependencies')
+      this.log('')
       this.npmInstall([
         'standard',
         'snazzy',
@@ -166,10 +184,12 @@ var MsNpmGenerator = yeoman.generators.Base.extend({
         'babel-eslint',
         'babel-preset-es2015',
         'github'
-      ], { 'saveDev': true }, done)
+      ], { 'saveDev': true })
     }
   },
   end: function () {
+    var log = this.log
+
     this.installDependencies({bower: false})
 
     // setup git and git remote
@@ -195,13 +215,44 @@ var MsNpmGenerator = yeoman.generators.Base.extend({
     var respository = this.userValues.repository
     var name = this.moduleName
     var description = this.userValues.moduleDescription
-    var token = this.config.get('GITHUB_TOKEN')
+    var token = this.globalConfig.get('token')
 
     var done = this.async()
+
+    log(chalk.green('info'), 'building out project README.md file')
+
     this.spawnCommand('npm', ['run', 'readme']).on('close', () => {
+      log('')
+      log(chalk.green('info'), 'initializing git repository and committing files')
+      log('')
+
       async.eachSeries(gitArgs, spawn, () => {
         if (respository !== 'Please create one for me') return done()
-        createRepository(token, name, description, done)
+
+        log('')
+        log(chalk.green('info'), 'attempting to create github repository "' + name + '"')
+
+        if (!token) {
+          log(chalk.bold.red('error'), 'no github oauth token found, unable to create repository')
+          return done()
+        }
+        var github = new Github({})
+        github.authenticate({
+          type: 'oauth',
+          token: token
+        })
+
+        github.repos.create({
+          name: name,
+          description: description
+        }, function (err, res) {
+          if (err || res.meta.status !== '201 Created') {
+            log(chalk.bold.red('error'), 'unable to automatically create repository, does it already exist?')
+            return
+          }
+          log(chalk.green('info'), 'repository "' + name + '" successfully created')
+          done()
+        })
       })
     })
   }
