@@ -1,17 +1,17 @@
 {
-  "name": "<%= _.slugify(moduleName) %>",
+  "name": "<%= moduleNameSlug %>",
   "description": "<%= moduleDescription %>",
   "version": "0.0.0",
   "license": "MIT",
-  "main": "index.js",
+  "main": "./dist/index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/<%= githubOrganizationOrUsername %>/<%= _.slugify(moduleName) %>.git"
+    "url": "https://github.com/<%= githubOrganizationOrUsername %>/<%= moduleNameSlug %>.git"
   },
   "bugs": {
-    "url": "https://github.com/<%= githubOrganizationOrUsername %>/<%= _.slugify(moduleName) %>/issues"
+    "url": "https://github.com/<%= githubOrganizationOrUsername %>/<%= moduleNameSlug %>/issues"
   },
-  "homepage": "https://github.com/<%= githubOrganizationOrUsername %>/<%= _.slugify(moduleName) %>",
+  "homepage": "https://github.com/<%= githubOrganizationOrUsername %>/<%= moduleNameSlug %>",
   "author": {
     "name": "<%= authorName %>",
     "email": "<%= authorEmail %>",
@@ -26,13 +26,15 @@
     "test:ci": "mocha -R spec test",
     "test:dev": "testem .",
     "test": "npm run test:ci",
-    "prepublish": "npm test && npm prune",
+    "build": "babel src --presets babel-preset-es2015 --out-dir dist",
+    "prepublish": "npm test && npm prune && npm run build",
     "preversion:patch": "npm run test",
     "version:patch": "xyz -i patch",
     "preversion:minor": "npm run test",
     "version:minor": "xyz -i minor",
     "preversion:major": "npm run test",
-    "version:major": "xyz -i major"
+    "version:major": "xyz -i major",
+    "readme": "projectz compile"
   },
   "publishConfig": {
     "registry": "http://registry.npmjs.org"
@@ -40,5 +42,44 @@
   "keywords": <%= moduleKeywords %>,
   "dependencies": {},
   "devDependencies": {},
-  "peerDependencies": {}
+  "peerDependencies": {},
+  "maintainers": [
+    "<%= authorName %> <%= authorEmail %>"
+  ],
+  "contributors": [],
+  "badges": {
+    "list": [
+      [
+        "badge",
+        {
+          "image": "https://mediasuite.co.nz/ms-badge.png",
+          "url": "https://mediasuite.co.nz",
+          "title": "The Media Suite",
+          "alt": "The Media Suite"
+        }
+      ],
+      "---",
+      [
+        "badge",
+        {
+          "image": "https://nodei.co/npm/<%= moduleNameSlug %>.png?downloads=true&stars=true",
+          "url": "https://nodei.co/npm/<%= moduleNameSlug %>"
+        }
+      ],
+      "---",
+      "travisci",
+      "npmversion",
+      "npmdownloads",
+      "daviddm",
+      "daviddmdev"
+    ]
+  },
+  "sponsors": [
+    "The Media Suite (http://mediasuite.co.nz)"
+  ],
+  "standard": {
+    "ignore": [
+      "/dist/"
+    ]
+  }
 }
